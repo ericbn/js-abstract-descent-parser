@@ -30,5 +30,10 @@ Expression.match = function(input) {
   var factor = function() {
   };
 
+  // number : /\d+(?:\.\d+)?/
+  var number = function() {
+    return regExp(/\d+(?:\.\d+)?/);
+  };
+
   return input;
 };
