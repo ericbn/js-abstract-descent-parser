@@ -1,0 +1,10 @@
+{
+  "name": "js-abstract-descent-parser",
+  "version": "0.1.0",
+  "repository": "ericbn/js-abstract-descent-parser",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-jasmine": "^0.8.2",
+    "grunt-contrib-jshint": "^0.11.2"
+  }
+}

@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>Expression - JavaScript Recursive Descent Parser</title>
+  <meta charset="UTF-8">
+  <script src="lib/jquery-2.1.4.min.js"></script>
+  <script src="src/expression.js"></script>
+  <style>
+  textarea { font-family: monospace; width: 50em; height: 5em; }
+  </style>
+</head>
+<body>
+  <h2>Expression</h2>
+  <h3>Grammar</h3>
+  <pre>  expr : term (('+' | '-') term)*
+  term : factor (('*' | '/') factor)*
+factor : number | '(' expr ')'
+number : /\d+(?:\.\d+)?/</pre>
+  <h3>Input</h3>
+  <textarea id="expr">2+2</textarea>
+  <div id="match-section">
+    <h3>Matched</h3>
+    <pre id="match"></pre>
+  </div>
+  <div id="result-section">
+    <h3>Result</h3>
+    <pre id="result"></pre>
+  </div>
+
+<script>
+if (Expression.parse) {
+  $('#match-section').hide();
+} else {
+  $('#result-section').hide();
+}
+var onExpr = function() {
+  var input = $('#expr').val();
+  if (Expression.parse) {
+    var parsed = Expression.parse ? Expression.parse(input) : null;
+    $('#result').html(parsed ? parsed.match + ' = ' + parsed.result : '');
+  } else {
+    var match = Expression.match ? Expression.match(input) : null;
+    $('#match').html(match || '');
+  }
+};
+$('#expr').on('input', onExpr);
+onExpr();
+</script>
+
+</body>
+</html>
