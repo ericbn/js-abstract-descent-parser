@@ -2,7 +2,9 @@
 
 #### 1. Improve grammar
 
-The current grammar does not support the exponentiation operator (`^`), nor the unary negation operator (`-`). The first challenge is to improve the grammar so those are supported, and implement the changes. The following unit tests should pass:
+The current grammar does not support the exponentiation operator (`^`), nor the unary negation operator (`-`). The first challenge is to improve the grammar so those are supported, and implement the changes. Mind that exponentiation should have higher precedence than multiplication or division, and lower precedence than parenthesis.
+
+The following unit tests should pass:
 
 ```javascript
     it("should parse exponentiation", function() {
@@ -16,7 +18,25 @@ The current grammar does not support the exponentiation operator (`^`), nor the 
 
 The current parser returns the result and the matched string of the input mathematical expression when `Expression.parse(input)` is called. The second challenge is to add a `Expression.compile(input)` function that returns an [Abstract Syntax Tree (AST)](http://stackoverflow.com/q/5026517/2654518).
 
-The AST should have a `result()` function that computes the result when called. Implement it such as each AST node has a `result()` function that computes its subtree result.
+The AST should have a `result()` function that computes the result when called. Implement it such as each AST node has a `result()` function that computes its subtree result. You can use the following code and represent your nodes as instances of `Operation` and `Constant`:
+
+```javascript
+  var Operation = function(leftNode, op, rightNode) {
+    this.leftNode = leftNode;
+    this.op = op;
+    this.rightNode = rightNode;
+  };
+  Operation.prototype.result = function() {
+    // implement this
+  };
+
+  var Constant = function(val) {
+    this.val = val;
+  };
+  Constant.prototype.result = function() {
+    // implement this
+  };
+```
 
 For the input `"8*(2+3+5)"`, the function `Expression.compile(input)` should return the following AST:
 
@@ -36,7 +56,9 @@ leftNode/      \rightNode
      val:2      val:3
 ```
 
-The AST root node should also have a `match` property with the string matched as value. The following unit tests should pass:
+The AST root node should also have a `match` property with the string matched as value.
+
+The following unit tests should pass:
 
 ```javascript
   describe("compile", function() {
