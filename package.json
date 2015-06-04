@@ -1,6 +1,6 @@
 {
   "name": "js-abstract-descent-parser",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": "ericbn/js-abstract-descent-parser",
   "devDependencies": {
     "grunt": "~0.4.5",

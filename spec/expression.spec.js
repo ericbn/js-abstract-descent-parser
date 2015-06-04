@@ -33,7 +33,7 @@ describe("Expression", function() {
       expect(Expression.match(input)).toBe(input.slice(0, -4));
     });
   });
-  xdescribe("parse", function() {
+  describe("parse", function() {
     it("should parse integer", function() {
       expect(Expression.parse("144").result).toBe(144);
     });
