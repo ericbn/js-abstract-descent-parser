@@ -1,3 +1,13 @@
+### Further reading / watching
+
+#### Online course
+
+* Stanford University's [Compilers](https://www.coursera.org/course/compilers)
+
+#### Book
+
+* Aho, Lam, Sethi & Ullman's [Compilers: principles, techniques, and tools ("dragon book")](http://dragonbook.stanford.edu/)
+
 ### Challenges
 
 #### 1. Improve grammar
@@ -120,6 +130,7 @@ The following unit tests should pass:
   });
 ```
 
+<!--
 #### 4. Implement an Abstract Descent Parser generator (HARD!)
 
 The generator should receive an EBNF grammar definition as its input, and generate javascript code for an Abstract Descent Parser that matches strings with the given grammar. The generated parser should have a `match(input)` function that returns the matched string.
@@ -136,6 +147,7 @@ number : /\d+(?:\.\d+)?/;
 ```
 
 It should recognize `|` for "or", parenthesis for a grouped sequence of symbols, `*` for zero-or-more, and also `+` for one-or-more and `?` for optional symbol.
+-->
 
 ### Running static code analysis and unit tests
 
