@@ -4,29 +4,16 @@
 
 * Stanford University's [Compilers](https://www.coursera.org/course/compilers)
 
-#### Book
+#### Books
 
 * Aho, Lam, Sethi & Ullman's [Compilers: principles, techniques, and tools ("dragon book")](http://dragonbook.stanford.edu/)
+* Fowler's [Domain Specific Languages](http://martinfowler.com/books/dsl.html)
 
 ### Challenges
 
-#### 1. Improve grammar
+#### 1. Make parser generate an Abstract Syntax Tree
 
-The current grammar does not support the exponentiation operator (`^`), nor the unary negation operator (`-`). The first challenge is to improve the grammar so those are supported, and implement the changes. Mind that exponentiation should have higher precedence than multiplication or division, and lower precedence than parenthesis.
-
-The following unit tests should pass:
-
-```javascript
-    it("should parse exponentiation", function() {
-      expect(Expression.parse("2*2^8").result).toBe(512);
-    });
-    it("should parse negation", function() {
-      expect(Expression.parse("2^-(2*-2)+-5").result).toBe(11);
-    });
-```
-#### 2. Make parser generate an Abstract Syntax Tree
-
-The current parser returns the result and the matched string of the input mathematical expression when `Expression.parse(input)` is called. The second challenge is to add a `Expression.compile(input)` function that returns an [Abstract Syntax Tree (AST)](http://stackoverflow.com/q/5026517/2654518).
+The current mathematical expression parser returns the result and the matched string when `Expression.parse(input)` is called. The first challenge is to add a `Expression.compile(input)` function that returns an [Abstract Syntax Tree (AST)](http://stackoverflow.com/q/5026517/2654518).
 
 The AST should have a `result()` function that computes the result when called. Implement it such as each AST node has a `result()` function that computes its subtree result. You can use the following code and represent your nodes as instances of `Operation` and `Constant`:
 
@@ -66,13 +53,14 @@ leftNode/      \rightNode
      val:2      val:3
 ```
 
-The AST root node should also have a `match` property with the string matched as value.
+The AST root node should also have a `match` property, with the string matched as its value.
 
 The following unit tests should pass:
 
 ```javascript
   describe("compile", function() {
-    var ast = Expression.compile("8*(2+3+5)");
+    var input = "8*(2+3+5)";
+    var ast = Expression.compile(input);
     it("should create valid AST", function() {
       expect(JSON.stringify(ast)).toBe(JSON.stringify({
         leftNode: {
@@ -100,10 +88,22 @@ The following unit tests should pass:
     it("should create AST that computes right result", function() {
       expect(ast.result()).toBe(80);
     });
+    it("should create AST that returns match in root node", function() {
+      expect(ast.match).toBe(input);
+    });
   });
 ```
 
-#### 3. Make parser accept variables
+To keep the original unit tests working, you might want to change `Expression.parse` function to:
+
+```javascript
+Expression.parse = function(input) {
+  var ast = Expression.compile(input);
+  return ast ? { result: ast.result(), match: ast.match } : null;
+};
+```
+
+#### 2. Make parser accept variables
 
 This requires the parser to return an AST, so you must complete the previous challenge first.
 
@@ -128,6 +128,46 @@ The following unit tests should pass:
       expect(ast.result({ x: 144, y: 34 })).toBe(28);
     });
   });
+```
+
+To keep the previous unit tests working, make sure the `result()` function works if no object is passed as parameter.
+
+#### 3. Further improve the grammar
+
+The current grammar does not support the exponentiation operator (`^`), nor the unary negation operator (`-`). The third challenge is to improve the grammar so those are supported, and implement the changes. Note that exponentiation should have higher precedence than multiplication or division, and lower precedence than parenthesis.
+
+When including the unary negation to the grammar, you might want to use the EBNF optional notation (`?`). The production "`s : t?`", for example, means `s` is defined by an optional `t` symbol. This is written in BNF as "`s : t | ε`", where `ε` means empty. 
+
+The helper function for optional is straighforward to implement. It receives a function as parameter, calls the function and always returns `true`, since matching "empty" is valid. As we have an "or" in the BNF form, it should backtrack if the function passed as parameter fails.
+
+```javascript
+  var optional = function(func) {
+    var backtrack = index;
+    if (!func()) { index = bracktrack; }
+    return true;
+  };
+```
+
+You might also need to create a new type of tree node, a Negation:
+
+```javascript
+  var Negation = function(childNode) {
+    this.childNode = childNode;
+  };
+  Negation.prototype.result = function() {
+    // implement this
+  };
+```
+
+The following unit tests should pass:
+
+```javascript
+    it("should parse exponentiation", function() {
+      expect(Expression.parse("2*2^8").result).toBe(512);
+    });
+    it("should parse negation", function() {
+      expect(Expression.parse("2^-(2*-2)+-5").result).toBe(11);
+    });
 ```
 
 <!--
