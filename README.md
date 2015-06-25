@@ -1,3 +1,7 @@
+### Talk
+
+* [Introduction to Grammar and Parsing using the Recursive Descent Parser algorithm](https://www.youtube.com/watch?v=9jSSSE2FuLU)
+
 ### Further reading / watching
 
 #### Online course
