@@ -117,6 +117,17 @@ This requires the parser to return an AST, so you must complete the previous cha
 
 The current grammar only accepts constant numbers. Improve the grammar so it can also accept variables, defined by letters in the mathematical expression. The AST returned by the parser should now have its `result()` function take an object as argument. The AST should compute the result using the values from the object variables when a variable appears in the mathematical expression.
 
+You might need to create a new type of tree node, a Variable:
+
+```javascript
+  var Variable = function(id) {
+    this.id = id;
+  };
+  Variable.prototype.result = function(obj) {
+    // implement this
+  };
+```
+
 The following unit tests should pass:
 
 ```javascript
@@ -135,7 +146,6 @@ The following unit tests should pass:
       expect(ast.result({ x: 9, y: 4 })).toBe(643);
       expect(ast.result({ x: 144, y: 34 })).toBe(28);
     });
-  });
 ```
 
 To keep the previous unit tests working, make sure the `result()` function works if no object is passed as parameter.
@@ -144,14 +154,15 @@ To keep the previous unit tests working, make sure the `result()` function works
 
 The current grammar does not support the exponentiation operator (`^`), nor the unary negation operator (`-`). The third challenge is to improve the grammar so those are supported, and implement the changes. Note that exponentiation should have higher precedence than multiplication or division, and lower precedence than parenthesis.
 
-When including the unary negation to the grammar, you might want to use the EBNF optional notation (`?`). The production "`s : t?`", for example, means `s` is defined by an optional `t` symbol. This is written in BNF as "`s : t | ε`", where `ε` means empty. 
+When including the unary negation to the grammar, you might want to use the EBNF optional notation (`?`). The production "`s : t?`", for example, means `s` is defined by an optional `t` symbol. This is written in BNF as "`s : t | ε`", where `ε` means empty.
 
 The helper function for optional is straighforward to implement. It receives a function as parameter, calls the function and always returns `true`, since matching "empty" is valid. As we have an "or" in the BNF form, it should backtrack if the function passed as parameter fails.
 
 ```javascript
+  // s : t?  ==>  s : t | empty  ==>  var s = function() { return optional(t); };
   var optional = function(func) {
     var backtrack = index;
-    if (!func()) { index = bracktrack; }
+    if (!func()) { index = backtrack; }
     return true;
   };
 ```
@@ -162,7 +173,7 @@ You might also need to create a new type of tree node, a Negation:
   var Negation = function(childNode) {
     this.childNode = childNode;
   };
-  Negation.prototype.result = function() {
+  Negation.prototype.result = function(obj) {
     // implement this
   };
 ```
