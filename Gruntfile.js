@@ -3,9 +3,6 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     jshint: {
-      options: {
-        '-W053': true
-      },
       all: ['Gruntfile.js', 'src/*.js', 'spec/*.js']
     },
     jasmine: {

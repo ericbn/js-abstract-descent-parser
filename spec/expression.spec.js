@@ -8,6 +8,10 @@ describe("Expression", function() {
       var input = "1.618*";
       expect(Expression.match(input)).toBe(input.slice(0, -1));
     });
+    it("should match resulting zero", function() {
+      var input = "13-13/.";
+      expect(Expression.match(input)).toBe(input.slice(0, -2));
+    });
     it("should match starting with zero", function() {
       var input = "0-5+(";
       expect(Expression.match(input)).toBe(input.slice(0, -2));
@@ -39,6 +43,9 @@ describe("Expression", function() {
     });
     it("should parse float", function() {
       expect(Expression.parse("1.618").result).toBe(1.618);
+    });
+    it("should parse resulting zero", function() {
+      expect(Expression.parse("13-13").result).toBe(0);
     });
     it("should parse starting with zero", function() {
       expect(Expression.parse("0-5").result).toBe(-5);

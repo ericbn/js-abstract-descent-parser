@@ -1,6 +1,7 @@
 var Expression = Expression || {};
 
 Expression.parse = function(input) {
+  'use strict';
   var index = 0;
 
   // s : 'a'  ==>  var s = function() { return char('a'); };
@@ -24,7 +25,7 @@ Expression.parse = function(input) {
     var backtrack = index;
     for (var len = arguments.length, i = 0; i < len; i++){
       var val = arguments[i]();
-      if (val) { return val; }
+      if (val !== null) { return val; }
       index = backtrack;
     }
     return null;
@@ -40,9 +41,9 @@ Expression.parse = function(input) {
   // expr : term (('+' | '-') term)*
   var expr = function() {
     var leftVal;
-    return ((leftVal = term()) && zeroOrMore(function() {
+    return ((leftVal = term()) !== null && zeroOrMore(function() {
       var op, rightVal;
-      if ((op = regExp(/[+-]/)) && (rightVal = term())) {
+      if ((op = regExp(/[+-]/)) && (rightVal = term()) !== null) {
         switch (op) {
         case '+':
           leftVal += rightVal;
@@ -54,15 +55,15 @@ Expression.parse = function(input) {
         return true;
       }
       return false;
-    })) ? truthyNumber(leftVal) : null;
+    })) ? leftVal : null;
   };
 
   // term : factor (('*' | '/') factor)*
   var term = function() {
     var leftVal;
-    return ((leftVal = factor()) && zeroOrMore(function() {
+    return ((leftVal = factor()) !== null && zeroOrMore(function() {
       var op, rightVal;
-      if ((op = regExp(/[*\/]/)) && (rightVal = factor())) {
+      if ((op = regExp(/[*\/]/)) && (rightVal = factor()) !== null) {
         switch (op) {
         case '*':
           leftVal *= rightVal;
@@ -74,7 +75,7 @@ Expression.parse = function(input) {
         return true;
       }
       return false;
-    })) ? truthyNumber(leftVal) : null;
+    })) ? leftVal : null;
   };
 
   // factor : number | '(' expr ')'
@@ -86,21 +87,17 @@ Expression.parse = function(input) {
   };
   var factor2 = function() {
     var val;
-    return (char('(') && (val = expr()) && char(')')) ? val : null;
+    return (char('(') && (val = expr()) !== null && char(')')) ? val : null;
   };
 
   // number : /\d+(?:\.\d+)?/
   var number = function() {
     var str = regExp(/\d+(?:\.\d+)?/);
-    return str ? truthyNumber(parseFloat(str)) : null;
-  };
-  var truthyNumber = function(val) {
-    // forcing new Number() so 0 won't be evaluated as falsy
-    return val || new Number(0);
+    return str ? parseFloat(str) : null;
   };
 
   var result = expr();
-  return result ? { result: result, match: input.slice(0, index) } : null;
+  return (result !== null) ? { result: result, match: input.slice(0, index) } : null;
 };
 
 Expression.match = function(input) {
