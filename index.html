@@ -11,6 +11,8 @@
 </head>
 <body>
   <h2>Expression</h2>
+  <h3>JavaScript Recursive Descent Parser</h3>
+  <p>Source: <a href="https://github.com/ericbn/js-abstract-descent-parser">https://github.com/ericbn/js-abstract-descent-parser</a></p>
   <h3>Grammar</h3>
   <pre>  expr : term (('+' | '-') term)*
   term : factor (('*' | '/') factor)*
@@ -26,7 +28,6 @@ number : /\d+(?:\.\d+)?/</pre>
     <h3>Result</h3>
     <pre id="result"></pre>
   </div>
-
 <script>
 if (Expression.parse) {
   $('#match-section').hide();
