@@ -29,21 +29,30 @@ number : /\d+(?:\.\d+)?/</pre>
     <pre id="result"></pre>
   </div>
 <script>
-if (Expression.parse) {
-  $('#match-section').hide();
-} else {
-  $('#result-section').hide();
-}
 var onExpr = function() {
   var input = $('#expr').val();
-  if (Expression.parse) {
-    var parsed = Expression.parse ? Expression.parse(input) : null;
+  if (Expression.compile) {
+    var obj = JSON.parse( $('#json').val());
+    var ast = Expression.compile(input);
+    $('#result').html(ast ? ast.match + ' = ' + ast.result(obj) : '');
+  } else if (Expression.parse) {
+    var parsed = Expression.parse(input);
     $('#result').html(parsed ? parsed.match + ' = ' + parsed.result : '');
   } else {
     var match = Expression.match ? Expression.match(input) : null;
     $('#match').html(match || '');
   }
 };
+if (Expression.compile) {
+  $('#json').on('input', onExpr);
+} else {
+  $('#json-section').hide();
+}
+if (Expression.parse) {
+  $('#match-section').hide();
+} else {
+  $('#result-section').hide();
+}
 $('#expr').on('input', onExpr);
 onExpr();
 </script>
