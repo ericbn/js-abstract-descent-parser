@@ -18,7 +18,11 @@
   term : factor (('*' | '/') factor)*
 factor : number | '(' expr ')'
 number : /\d+(?:\.\d+)?/</pre>
-  <h3>Input</h3>
+  <div id="json-section">
+    <h3>Input Object</h3>
+    <textarea id="json">{ "x": 2 }</textarea>
+  </div>
+  <h3>Input Expression</h3>
   <textarea id="expr">2+2</textarea>
   <div id="match-section">
     <h3>Matched</h3>
