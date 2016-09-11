@@ -162,7 +162,7 @@ The helper function for optional is straighforward to implement. It receives a f
   // s : t?  ==>  s : t | empty  ==>  var s = function() { return optional(t); };
   var optional = function(func) {
     var backtrack = index;
-    if (!func()) { index = backtrack; }
+    if (func() === null) { index = backtrack; }
     return true;
   };
 ```
