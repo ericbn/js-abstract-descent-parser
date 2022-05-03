@@ -7,6 +7,9 @@ module.exports = function (grunt) {
     },
     jasmine: {
       options: {
+        // See https://github.com/gruntjs/grunt-contrib-jasmine/issues/339
+        version: '3.8.0',
+        noSandbox: true,
         specs: 'spec/*.spec.js'
       },
       all: 'src/*.js'

@@ -216,5 +216,5 @@ It should recognize `|` for "or", parenthesis for a grouped sequence of symbols,
 
 #### Requisites
 
-1. [Node.js](https://nodejs.org/) version >= 0.8.0
+1. [Node.js](https://nodejs.org/) version > 8
 2. Grunt CLI (install with `npm install -g grunt-cli`)
